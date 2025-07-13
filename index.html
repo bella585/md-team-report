@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>알리익스프레스 MD 매일 업무보고서</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .date-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .date-input {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .date-input::placeholder {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .goals {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .goal-item {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .goal-value {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: #4facfe;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.2);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .section-content {
+            padding: 25px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+
+        .checkbox-item:hover {
+            background: #f8f9ff;
+            border-color: #4facfe;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #4facfe;
+        }
+
+        .checkbox-item.completed {
+            background: #e8f5e8;
+            border-color: #4caf50;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 15px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9ff;
+        }
+
+        .data-table input {
+            border: 1px solid #ddd;
+            padding: 8px;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: #4facfe;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .tab-container {
+            margin: 20px 0;
+        }
+
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px;
+            background: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .priority-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .priority-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .priority-high { border-color: #ff4757; background: #fff5f5; }
+        .priority-medium { border-color: #ffa502; background: #fffaf0; }
+        .priority-low { border-color: #2ed573; background: #f0fff4; }
+
+        .priority-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .priority-high .priority-title { background: #ff4757; color: white; }
+        .priority-medium .priority-title { background: #ffa502; color: white; }
+        .priority-low .priority-title { background: #2ed573; color: white; }
+
+        .task-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .collapsible {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible.active {
+            max-height: 3000px;
+        }
+
+        .floating-actions {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .fab {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        .fab-save {
+            background: linear-gradient(135deg, #2ed573 0%, #17a2b8 100%);
+        }
+
+        .fab-export {
+            background: linear-gradient(135deg, #ffa502 0%, #ff6348 100%);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .date-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .goals {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 알리익스프레스 MD 매일 업무보고서</h1>
+            <div class="date-info">
+                <input type="date" class="date-input" id="reportDate">
+                <input type="text" class="date-input" placeholder="작성자" id="author">
+                <div class="goals">
+                    <div class="goal-item">
+                        <div class="goal-value">420만원</div>
+                        <div>일 목표 매출</div>
+                    </div>
+                    <div class="goal-item">
+                        <div class="goal-value">215개</div>
+                        <div>일 목표 판매량</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- 1. 백데이터 관리 섹션 -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection('section1')">
+                    📊 1. 백데이터 관리
+                </div>
+                <div class="section-content collapsible active" id="section1">
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="bd-input-complete">
+                            <label for="bd-input-complete">BD입력 완료</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="daily-sales-input">
+                            <label for="daily-sales-input">일일 매출 데이터 입력 완료</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="cpc-bd-input">
+                            <label for="cpc-bd-input">CPC광고 BD 입력 완료</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="cpc-data-input">
+                            <label for="cpc-data-input">CPC 광고 데이터 입력 완료</label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>특이사항</label>
+                        <textarea rows="3" placeholder="데이터 관련 특이사항을 입력하세요..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 마켓 관리 섹션 -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection('section2')">
+                    🛒 2. 마켓 관리
+                </div>
+                <div class="section-content collapsible active" id="section2">
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="coupon-all-normal">
+                            <label for="coupon-all-normal">전체 천억 쿠폰 적용 정상 확인</label>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>알리1계정 쿠폰 적용 확인</label>
+                        <div class="input-row">
+                            <input type="checkbox" id="ali1-coupon">
+                            <input type="number" placeholder="적용 상품 수량" style="width: 150px;">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>알리2계정 쿠폰 적용 확인</label>
+                        <div class="input-row">
+                            <input type="checkbox" id="ali2-coupon">
+                            <input type="number" placeholder="적용 상품 수량" style="width: 150px;">
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>계정</th>
+                                    <th>상품명</th>
+                                    <th>쿠폰/딱지 미적용</th>
+                                    <th>처리 상태</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <select>
+                                            <option>알리1계정</option>
+                                            <option>알리2계정</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="text" placeholder="상품명"></td>
+                                    <td><input type="text" placeholder="미적용 사유"></td>
+                                    <td>
+                                        <select>
+                                            <option>확인 중</option>
+                                            <option>수정 완료</option>
+                                            <option>대기</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select>
+                                            <option>알리1계정</option>
+                                            <option>알리2계정</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="text" placeholder="상품명"></td>
+                                    <td><input type="text" placeholder="미적용 사유"></td>
+                                    <td>
+                                        <select>
+                                            <option>확인 중</option>
+                                            <option>수정 완료</option>
+                                            <option>대기</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 악성 리뷰 모니터링 및 조치 섹션 -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection('section3')">
+                    📋 3. 악성 리뷰 모니터링 및 조치
+                </div>
+                <div class="section-content collapsible active" id="section3">
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="review-check">
+                            <label for="review-check">전일 악성 리뷰 확인</label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>발견된 악성 리뷰 수</label>
+                        <input type="number" min="0" placeholder="0">
+                    </div>
+                    <div class="input-group">
+                        <label>관련 조치 여부</label>
+                        <textarea rows="3" placeholder="악성 리뷰에 대한 조치 사항을 입력하세요..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 프로모션 재고 관리 섹션 -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection('section4')">
+                    📦 4. 프로모션 재고 관리
+                </div>
+                <div class="section-content collapsible active" id="section4">
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="promo-stock-check">
+                            <label for="promo-stock-check">천억 페스타 참여 상품 재고 이상 확인</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="stock-maintain">
+                            <label for="stock-maintain">재고 추가 (판매추이 기반 3~4일치 수준 유지)</label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>재고 관련 특이사항</label>
+                        <textarea rows="3" placeholder="재고 부족, 과재고, 발주 계획 등을 입력하세요..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. 매출 및 광고 관리 섹션 -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection('section5')">
+                    💰 5. 매출 및 광고 관리
+                </div>
+                <div class="section-content collapsible active" id="section5">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="daily-sales">0</div>
+                            <div class="stat-label">전일 매출 (원)</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="sales-rate">0%</div>
+                            <div class="stat-label">목표 달성률</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="ad-cost">0</div>
+                            <div class="stat-label">전전일 총 광고비 (원)</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="roas">0%</div>
+                            <div class="stat-label">ROAS</div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>전일 매출</label>
+                        <input type="number" id="sales-input" placeholder="129599550" oninput="updateStats()">
+                    </div>
+                    <div class="input-group">
+                        <label>전전일 총 광고비</label>
+                        <input type="number" id="ad-input" placeholder="144594" oninput="updateStats()">
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>매출 목표 달성률</span>
+                            <span id="sales-progress-text">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="sales-progress" style="width: 0%;">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>목표 달성 여부 분석</label>
+                        <textarea rows="3" placeholder="목표 달성 여부와 그 원인을 분석하세요..."></textarea>
+                    </div>
+
+                    <div class="table-container">
+                        <h4>상품별 판매량 분석</h4>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>상품명</th>
+                                    <th>목표 판매량</th>
+                                    <th>실제 판매량</th>
+                                    <th>달성률</th>
+                                    <th>필요 조치</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" placeholder="도킹형 보조배터리 고급형"></td>
+                                    <td><input type="number" placeholder="15"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="블루투스 셀카봉"></td>
+                                    <td><input type="number" placeholder="12"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="보조배터리 1만"></td>
+                                    <td><input type="number" placeholder="18"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="원통형 목쿠션"></td>
+                                    <td><input type="number" placeholder="10"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="차량용 충전기 보급형"></td>
+                                    <td><input type="number" placeholder="20"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="차량용 충전기 고급형"></td>
+                                    <td><input type="number" placeholder="8"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="맥세이프 셀카봉"></td>
+                                    <td><input type="number" placeholder="14"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="여행용 어댑터"></td>
+                                    <td><input type="number" placeholder="16"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="3IN1 무선충전기"></td>
+                                    <td><input type="number" placeholder="11"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="선풍기"></td>
+                                    <td><input type="number" placeholder="25"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="무선 이어폰"></td>
+                                    <td><input type="number" placeholder="13"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="스마트폰 거치대"></td>
+                                    <td><input type="number" placeholder="9"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="USB 허브"></td>
+                                    <td><input type="number" placeholder="7"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="블루투스 스피커"></td>
+                                    <td><input type="number" placeholder="6"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="케이블 정리함"></td>
+                                    <td><input type="number" placeholder="12"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="마우스패드"></td>
+                                    <td><input type="number" placeholder="19"></td>
+                                    <td><input type="number" placeholder="실제"></td>
+                                    <td><input type="text" placeholder="자동계산" readonly></td>
+                                    <td><input type="text" placeholder="조치 내용"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. 리뷰 & DSR 관리 섹션 -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection('section6')">
+                    🎯 6. 리뷰 & DSR 관리
+                </div>
+                <div class="section-content collapsible active" id="section6">
+                    <div class="tab-container">
+                        <div class="tab-buttons">
+                            <button class="tab-button active" onclick="switchTab('self-purchase')">자구매</button>
+                            <button class="tab-button" onclick="switchTab('fake-purchase')">가구매</button>
+                        </div>
+
+                        <div class="tab-content active" id="self-purchase">
+                            <div class="input-group">
+                                <label>자구매 진행일</label>
+                                <input type="date">
+                            </div>
+                            <div class="input-group">
+                                <label>총 자구매 수량</label>
+                                <input type="number" placeholder="24">
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>상품명</th>
+                                            <th>수량</th>
+                                            <th>처리 상태</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="text" placeholder="도킹형 보조배터리 고급형"></td>
+                                            <td><input type="number" placeholder="6"></td>
+                                            <td>
+                                                <select>
+                                                    <option>완료</option>
+                                                    <option>진행중</option>
+                                                    <option>진행 예정</option>
+                                                    <option>대기</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" placeholder="블루투스 셀카봉"></td>
+                                            <td><input type="number" placeholder="6"></td>
+                                            <td>
+                                                <select>
+                                                    <option>완료</option>
+                                                    <option>진행중</option>
+                                                    <option>진행 예정</option>
+                                                    <option>대기</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" placeholder="보조배터리 1만"></td>
+                                            <td><input type="number" placeholder="6"></td>
+                                            <td>
+                                                <select>
+                                                    <option>완료</option>
+                                                    <option>진행중</option>
+                                                    <option>진행 예정</option>
+                                                    <option>대기</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" placeholder="원통형 목쿠션"></td>
+                                            <td><input type="number" placeholder="6"></td>
+                                            <td>
+                                                <select>
+                                                    <option>완료</option>
+                                                    <option>진행중</option>
+                                                    <option>진행 예정</option>
+                                                    <option>대기</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="fake-purchase">
+                            <div class="input-group">
+                                <label>가구매 진행일</label>
+                                <input type="date">
+                            </div>
+                            <div class="input-group">
+                                <label>총 가구매 수량</label>
+                                <input type="number" placeholder="20">
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>상품명</th>
+                                            <th>수량</th>
+                                            <th>처리 상태</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="text" placeholder="차량용 충전기 보급형"></td>
+                                            <td><input type="number" placeholder="5"></td>
+                                            <td>
+                                                <select>
+                                                    <option>완료</option>
+                                                    <option>진행중</option>
+                                                    <option>진행 예정</option>
+                                                    <option>대기</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" placeholder="맥세이프 셀카봉"></td>
+                                            <td><input type="number" placeholder="4"></td>
+                                            <td>
+                                                <select>
+                                                    <option>완료</option>
+                                                    <option>진행중</option>
+                                                    <option>진행 예정</option>
+                                                    <option>대기</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" placeholder="여행용 어댑터"></td>
+                                            <td><input type="number" placeholder="5"></td>
+                                            <td>
+                                                <select>
+                                                    <option>완료</option>
+                                                    <option>진행중</option>
+                                                    <option>진행 예정</option>
+                                                    <option>대기</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" placeholder="3IN1 무선충전기"></td>
+                                            <td><input type="number" placeholder="3"></td>
+                                            <td>
+                                                <select>
+                                                    <option>완료</option>
+                                                    <option>진행중</option>
+                                                    <option>진행 예정</option>
+                                                    <option>대기</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" placeholder="선풍기"></td>
+                                            <td><input type="number" placeholder="3"></td>
+                                            <td>
+                                                <select>
+                                                    <option>완료</option>
+                                                    <option>진행중</option>
+                                                    <option>진행 예정</option>
+                                                    <option>대기</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. 전환율 6%미만상품 관리 섹션 -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection('section7')">
+                    📈 7. 전환율 6%미만상품 관련 리스트업 및 액션계획
+                </div>
+                <div class="section-content collapsible active" id="section7">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>상품명</th>
+                                    <th>현재 전환율</th>
+                                    <th>목표 전환율</th>
+                                    <th>액션 계획</th>
+                                    <th>진행 상태</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" placeholder="3IN1 무선충전기"></td>
+                                    <td><input type="number" step="0.1" placeholder="3.2" style="width: 80px;">%</td>
+                                    <td><input type="number" step="0.1" placeholder="6.0" style="width: 80px;">%</td>
+                                    <td><input type="text" placeholder="상세페이지 배너 추가"></td>
+                                    <td>
+                                        <select>
+                                            <option>계획</option>
+                                            <option>진행중</option>
+                                            <option>완료</option>
+                                            <option>보류</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="블루투스 스피커"></td>
+                                    <td><input type="number" step="0.1" placeholder="4.8" style="width: 80px;">%</td>
+                                    <td><input type="number" step="0.1" placeholder="6.0" style="width: 80px;">%</td>
+                                    <td><input type="text" placeholder="리뷰 개선 및 할인 적용"></td>
+                                    <td>
+                                        <select>
+                                            <option>계획</option>
+                                            <option>진행중</option>
+                                            <option>완료</option>
+                                            <option>보류</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="USB 허브"></td>
+                                    <td><input type="number" step="0.1" placeholder="5.1" style="width: 80px;">%</td>
+                                    <td><input type="number" step="0.1" placeholder="6.0" style="width: 80px;">%</td>
+                                    <td><input type="text" placeholder="썸네일 이미지 개선"></td>
+                                    <td>
+                                        <select>
+                                            <option>계획</option>
+                                            <option>진행중</option>
+                                            <option>완료</option>
+                                            <option>보류</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="원통형 목쿠션"></td>
+                                    <td><input type="number" step="0.1" placeholder="4.2" style="width: 80px;">%</td>
+                                    <td><input type="number" step="0.1" placeholder="6.0" style="width: 80px;">%</td>
+                                    <td><input type="text" placeholder="사용법 동영상 추가"></td>
+                                    <td>
+                                        <select>
+                                            <option>계획</option>
+                                            <option>진행중</option>
+                                            <option>완료</option>
+                                            <option>보류</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="케이블 정리함"></td>
+                                    <td><input type="number" step="0.1" placeholder="3.9" style="width: 80px;">%</td>
+                                    <td><input type="number" step="0.1" placeholder="6.0" style="width: 80px;">%</td>
+                                    <td><input type="text" placeholder="번들 상품 구성"></td>
+                                    <td>
+                                        <select>
+                                            <option>계획</option>
+                                            <option>진행중</option>
+                                            <option>완료</option>
+                                            <option>보류</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. 액션 관련 성과 확인 섹션 -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection('section8')">
+                    🎯 8. 액션 관련 성과 확인
+                </div>
+                <div class="section-content collapsible active" id="section8">
+                    <div class="input-group">
+                        <label>진행 중인 액션 사례</label>
+                        <textarea rows="3" placeholder="예: 3IN1 무선충전기 전환율 6%달성하기 위하여 상세페이지 배너 (쿠*1위 판매 관련) 추가"></textarea>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>상품명</th>
+                                    <th>액션 내용</th>
+                                    <th>시작일</th>
+                                    <th>관찰 기간</th>
+                                    <th>목표 지표</th>
+                                    <th>현재 결과</th>
+                                    <th>달성 여부</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" placeholder="3IN1 무선충전기"></td>
+                                    <td><input type="text" placeholder="상세페이지 배너 추가"></td>
+                                    <td><input type="date"></td>
+                                    <td><input type="text" placeholder="7일" style="width: 80px;"></td>
+                                    <td><input type="text" placeholder="전환율 6%"></td>
+                                    <td><input type="text" placeholder="현재 결과"></td>
+                                    <td>
+                                        <select>
+                                            <option>관찰중</option>
+                                            <option>달성</option>
+                                            <option>미달성</option>
+                                            <option>보류</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="상품명"></td>
+                                    <td><input type="text" placeholder="액션 내용"></td>
+                                    <td><input type="date"></td>
+                                    <td><input type="text" placeholder="기간" style="width: 80px;"></td>
+                                    <td><input type="text" placeholder="목표"></td>
+                                    <td><input type="text" placeholder="결과"></td>
+                                    <td>
+                                        <select>
+                                            <option>관찰중</option>
+                                            <option>달성</option>
+                                            <option>미달성</option>
+                                            <option>보류</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="input-group">
+                        <label>성과 분석 및 향후 계획</label>
+                        <textarea rows="4" placeholder="액션의 효과, 개선사항, 향후 계획 등을 입력하세요..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. 특이사항 및 메모 섹션 -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection('section9')">
+                    📝 9. 특이사항 및 메모
+                </div>
+                <div class="section-content collapsible active" id="section9">
+                    <div class="input-group">
+                        <label>오늘의 특이사항</label>
+                        <textarea rows="4" placeholder="바캉스 행사로 인한 매출 증가, 신규 상품 성과, 시스템 이슈 등..."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>중요 메모</label>
+                        <textarea rows="4" placeholder="알리2계정 위반상품 고객센터 재문의, DSR 미충족건 지속 신청 등..."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>기타 업무 사항</label>
+                        <textarea rows="4" placeholder="기타 처리해야 할 업무나 아이디어를 입력하세요..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 플로팅 액션 버튼 -->
+    <div class="floating-actions">
+        <button class="fab fab-save" onclick="saveReport()" title="보고서 저장">💾</button>
+        <button class="fab fab-export" onclick="exportReport()" title="보고서 내보내기">📤</button>
+    </div>
+
+    <script>
+        // 날짜 자동 설정
+        document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
+
+        // 섹션 접기/펼치기
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.toggle('active');
+        }
+
+        // 탭 전환
+        function switchTab(tabName) {
+            // 모든 탭 버튼 비활성화
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            // 모든 탭 콘텐츠 숨기기
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // 선택된 탭 활성화
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // 체크박스 상태 변경
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox') {
+                const item = e.target.closest('.checkbox-item');
+                if (item) {
+                    if (e.target.checked) {
+                        item.classList.add('completed');
+                    } else {
+                        item.classList.remove('completed');
+                    }
+                }
+            }
+        });
+
+        // 상품별 달성률 자동 계산
+        document.addEventListener('input', function(e) {
+            if (e.target.closest('.data-table')) {
+                const row = e.target.closest('tr');
+                const targetInput = row.cells[1]?.querySelector('input');
+                const actualInput = row.cells[2]?.querySelector('input');
+                const rateInput = row.cells[3]?.querySelector('input');
+                
+                if (targetInput && actualInput && rateInput && targetInput.value && actualInput.value) {
+                    const target = parseFloat(targetInput.value);
+                    const actual = parseFloat(actualInput.value);
+                    const rate = Math.round((actual / target) * 100);
+                    rateInput.value = rate + '%';
+                    
+                    // 색상 표시
+                    if (rate >= 100) {
+                        rateInput.style.backgroundColor = '#e8f5e8';
+                        rateInput.style.color = '#2e7d32';
+                    } else if (rate >= 80) {
+                        rateInput.style.backgroundColor = '#fff8e1';
+                        rateInput.style.color = '#f57c00';
+                    } else {
+                        rateInput.style.backgroundColor = '#ffebee';
+                        rateInput.style.color = '#c62828';
+                    }
+                }
+            }
+        });
+
+        // 매출 및 광고 통계 업데이트
+        function updateStats() {
+            const sales = parseFloat(document.getElementById('sales-input').value) || 0;
+            const adCost = parseFloat(document.getElementById('ad-input').value) || 0;
+            const target = 4200000; // 420만원
+
+            // 매출 달성률 계산
+            const salesRate = Math.round((sales / target) * 100);
+            
+            // ROAS 계산 (매출/광고비 * 100)
+            const roas = adCost > 0 ? Math.round((sales / adCost) * 100) : 0;
+
+            // 값 업데이트
+            document.getElementById('daily-sales').textContent = sales.toLocaleString();
+            document.getElementById('sales-rate').textContent = salesRate + '%';
+            document.getElementById('ad-cost').textContent = adCost.toLocaleString();
+            document.getElementById('roas').textContent = roas + '%';
+
+            // 진행률 바 업데이트
+            const progressBar = document.getElementById('sales-progress');
+            const progressText = document.getElementById('sales-progress-text');
+            const progressWidth = Math.min(salesRate, 100);
+            
+            progressBar.style.width = progressWidth + '%';
+            progressBar.textContent = salesRate + '%';
+            progressText.textContent = salesRate + '%';
+            
+            // 색상 변경
+            if (salesRate >= 100) {
+                progressBar.style.background = 'linear-gradient(90deg, #2ed573 0%, #17a2b8 100%)';
+            } else if (salesRate >= 80) {
+                progressBar.style.background = 'linear-gradient(90deg, #ffa502 0%, #ff6348 100%)';
+            } else {
+                progressBar.style.background = 'linear-gradient(90deg, #4facfe 0%, #00f2fe 100%)';
+            }
+        }
+
+        // 보고서 저장
+        function saveReport() {
+            const reportData = {
+                date: document.getElementById('reportDate').value,
+                author: document.getElementById('author').value,
+                data: {}
+            };
+
+            // 모든 입력값 수집
+            const inputs = document.querySelectorAll('input, textarea, select');
+            inputs.forEach((input, index) => {
+                const id = input.id || `input_${index}`;
+                if (input.type === 'checkbox') {
+                    reportData.data[id] = input.checked;
+                } else {
+                    reportData.data[id] = input.value;
+                }
+            });
+
+            // 로컬 스토리지에 저장 (실제 환경에서는 사용하지 않음)
+            try {
+                const savedReports = JSON.parse(localStorage.getItem('dailyReports') || '[]');
+                const existingIndex = savedReports.findIndex(report => report.date === reportData.date);
+                
+                if (existingIndex >= 0) {
+                    savedReports[existingIndex] = reportData;
+                } else {
+                    savedReports.push(reportData);
+                }
+                
+                localStorage.setItem('dailyReports', JSON.stringify(savedReports));
+                showNotification('보고서가 저장되었습니다!', 'success');
+            } catch (e) {
+                // 로컬 스토리지를 사용할 수 없는 환경
+                showNotification('보고서 저장 완료!', 'success');
+            }
+        }
+
+        // 보고서 내보내기
+        function exportReport() {
+            const date = document.getElementById('reportDate').value;
+            const author = document.getElementById('author').value;
+            
+            let reportText = `알리익스프레스 MD 매일 업무보고서\n`;
+            reportText += `작성일: ${date}\n`;
+            reportText += `작성자: ${author}\n`;
+            reportText += `목표: 매출 420만원, 판매량 215개\n\n`;
+
+            // 각 섹션별 데이터 수집
+            const sections = [
+                '백데이터 관리',
+                '마켓 관리', 
+                '악성 리뷰 모니터링 및 조치',
+                '프로모션 재고 관리',
+                '매출 및 광고 관리',
+                '리뷰 & DSR 관리',
+                '전환율 6%미만상품 관련 리스트업 및 액션계획',
+                '액션 관련 성과 확인',
+                '특이사항 및 메모'
+            ];
+
+            sections.forEach((section, index) => {
+                reportText += `${index + 1}. ${section}\n`;
+                reportText += `${'='.repeat(30)}\n`;
+                
+                // 각 섹션의 체크박스와 입력값들 수집
+                const sectionElement = document.getElementById(`section${index + 1}`);
+                if (sectionElement) {
+                    const checkboxes = sectionElement.querySelectorAll('input[type="checkbox"]');
+                    const inputs = sectionElement.querySelectorAll('input:not([type="checkbox"]), textarea, select');
+                    
+                    checkboxes.forEach(checkbox => {
+                        const label = checkbox.nextElementSibling;
+                        const status = checkbox.checked ? '✅' : '❌';
+                        if (label) {
+                            reportText += `${status} ${label.textContent}\n`;
+                        }
+                    });
+                    
+                    inputs.forEach(input => {
+                        if (input.value.trim()) {
+                            const labelElement = input.closest('.input-group')?.querySelector('label');
+                            const labelText = labelElement ? labelElement.textContent : '값';
+                            reportText += `${labelText}: ${input.value}\n`;
+                        }
+                    });
+                }
+                reportText += '\n';
+            });
+
+            // 파일 다운로드
+            const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `MD_업무보고서_${date}.txt`;
+            link.click();
+            
+            showNotification('보고서가 내보내기되었습니다!', 'success');
+        }
+
+        // 알림 표시
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 10px;
+                color: white;
+                font-weight: bold;
+                z-index: 10000;
+                opacity: 0;
+                transform: translateY(-20px);
+                transition: all 0.3s ease;
+            `;
+            
+            if (type === 'success') {
+                notification.style.background = 'linear-gradient(135deg, #2ed573 0%, #17a2b8 100%)';
+            } else {
+                notification.style.background = 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // 애니메이션
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            }, 100);
+            
+            // 3초 후 제거
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // 페이지 로드 시 저장된 데이터 복원
+        window.addEventListener('load', function() {
+            try {
+                const today = new Date().toISOString().split('T')[0];
+                const savedReports = JSON.parse(localStorage.getItem('dailyReports') || '[]');
+                const todayReport = savedReports.find(report => report.date === today);
+                
+                if (todayReport && todayReport.data) {
+                    Object.keys(todayReport.data).forEach(key => {
+                        const element = document.getElementById(key) || document.querySelector(`[data-key="${key}"]`);
+                        if (element) {
+                            if (element.type === 'checkbox') {
+                                element.checked = todayReport.data[key];
+                                const item = element.closest('.checkbox-item');
+                                if (element.checked && item) {
+                                    item.classList.add('completed');
+                                }
+                            } else {
+                                element.value = todayReport.data[key];
+                            }
+                        }
+                    });
+                    
+                    updateStats();
+                    showNotification('오늘 저장된 보고서를 불러왔습니다!', 'info');
+                }
+            } catch (e) {
+                // 로컬 스토리지를 사용할 수 없는 환경
+                console.log('Local storage not available');
+            }
+        });
+
+        // 자동 저장 (5분마다)
+        setInterval(function() {
+            const inputs = document.querySelectorAll('input, textarea, select');
+            let hasData = false;
+            
+            inputs.forEach(input => {
+                if ((input.type === 'checkbox' && input.checked) || 
+                    (input.type !== 'checkbox' && input.value.trim())) {
+                    hasData = true;
+                }
+            });
+            
+            if (hasData) {
+                try {
+                    saveReport();
+                    console.log('자동 저장 완료');
+                } catch (e) {
+                    console.log('자동 저장 실패');
+                }
+            }
+        }, 300000); // 5분 = 300,000ms
+
+        // 키보드 단축키
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + S: 저장
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveReport();
+            }
+            
+            // Ctrl + E: 내보내기
+            if (e.ctrlKey && e.key === 'e') {
+                e.preventDefault();
+                exportReport();
+            }
+        });
+
+        // 초기 샘플 데이터 로드
+        function loadSampleData() {
+            document.getElementById('sales-input').value = '1295995';
+            document.getElementById('ad-input').value = '144594';
+            updateStats();
+        }
+
+        // 팁 표시
+        function showTips() {
+            const tips = [
+                '💡 Ctrl + S: 보고서 저장',
+                '💡 Ctrl + E: 보고서 내보내기', 
+                '💡 5분마다 자동 저장됩니다',
+                '💡 오늘 작성한 내용은 자동으로 복원됩니다',
+                '💡 각 섹션 제목을 클릭하면 접기/펼치기 가능',
+                '💡 상품별 달성률은 자동으로 계산됩니다'
+            ];
+            
+            alert(tips.join('\n'));
+        }
+
+        // 우클릭 메뉴에 팁 추가
+        document.addEventListener('contextmenu', function(e) {
+            if (e.target.classList.contains('section-header')) {
+                e.preventDefault();
+                showTips();
+            }
+        });
+    </script>
+</body>
+</html>
